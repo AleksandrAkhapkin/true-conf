@@ -14,25 +14,6 @@ import (
 	"syscall"
 )
 
-//Вам нужно написать маленькое приложение на ECHO framework предоставляющие REST API по работе с сущностью User.
-//
-//REST API должно удовлетворять следующие возможности:
-//• Добавление User //TODO OK
-//• Получение списка User
-//• Получение User по Id
-//• Редактирование User по Id
-//• Удаление User по Id
-//
-//REST API должно работать с форматом данных JSON.
-//
-//Сущность User должно состоять минимум из следующих полей:
-//• Идентификатор пользователя //TODO OK
-//• Отображаемое имя //TODO OK
-//
-//Вы можете использовать дополнительные поля, если считаете нужным.
-//
-//В качестве хранилища данных нужно использовать файл в формате JSON.
-
 func main() {
 	defer func() {
 		r := recover()
@@ -44,7 +25,7 @@ func main() {
 	}()
 
 	port := new(string)
-	flag.StringVar(port, "server-port", "8080", "path to yaml config")
+	flag.StringVar(port, "port", "8080", "path to yaml config")
 	flag.Parse()
 
 	srv, err := service.NewService()
