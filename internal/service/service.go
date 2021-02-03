@@ -68,21 +68,6 @@ func (s *Service) Close() {
 	}
 }
 
-func (s *Service) CreateUser(userName string) error {
-
-	//todo mutex
-	s.lastID++
-
-	user := types.User{
-		ID:   s.lastID,
-		Name: userName,
-	}
-
-	s.users.Users = append(s.users.Users, user)
-
-	return nil
-}
-
 func openOrCreate() (*os.File, error) {
 
 	file, err := os.OpenFile("users.json", os.O_RDWR, 0777)
