@@ -13,5 +13,8 @@ func NewRouter(h *handlers.Handlers) *echo.Echo {
 	e.POST("/createuser", h.CreateUser)
 	e.GET("/users", h.GetUsers)
 	e.GET("/user", h.GetUserByID)
+	e.PUT("/user", h.PutUserByID)
+	e.DELETE("/user", h.DeleteUserByID)
+
 	return e
 }

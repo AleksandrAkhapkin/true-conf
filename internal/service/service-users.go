@@ -42,3 +42,39 @@ func (s *Service) GetUser(id int) (*types.User, error) {
 
 	return nil, fmt.Errorf("Пользователь не найден")
 }
+
+func (s *Service) PutUser(id int, name string) error {
+
+	if s.users.Users == nil {
+		return fmt.Errorf("Пользователей еще нету")
+	}
+
+	for i, v := range s.users.Users {
+		if v.ID == id {
+			s.users.Users[i].Name = name
+			return nil
+		}
+	}
+
+	return fmt.Errorf("Пользователь не найден")
+}
+
+func (s *Service) DeleteUser(id int) error {
+
+	if s.users.Users == nil {
+		return fmt.Errorf("Пользователей еще нету")
+	}
+
+	usersTmp := &types.Users{}
+
+	for _, v := range s.users.Users {
+		if v.ID == id {
+			continue
+		}
+		usersTmp.Users = append(usersTmp.Users, v)
+	}
+
+	s.users = usersTmp
+
+	return nil
+}
