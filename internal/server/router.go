@@ -11,6 +11,6 @@ func NewRouter(h *handlers.Handlers) *echo.Echo {
 
 	e.GET("/ping", h.Ping)
 	e.GET("/createuser", h.CreateUser)
-	//	e.GET("/users", h.GetUsers)
+	e.GET("/users", h.GetUsers)
 	return e
 }

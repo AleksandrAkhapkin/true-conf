@@ -5,6 +5,7 @@ import (
 	"github.com/AleksandrAkhapkin/true-conf/pkg/logger"
 	"github.com/labstack/echo"
 	"github.com/pkg/errors"
+	"net/http"
 )
 
 type Handlers struct {
@@ -40,17 +41,19 @@ func (h *Handlers) CreateUser(c echo.Context) error {
 	return nil
 }
 
-//func (h *Handlers) GetUsers(c echo.Context) error {
-//
-//
-//	users, err := h.srv.GetUsers()
-//	if err != nil {
-//		return err
-//	}
-//
-//	if _,  err := c.Response().Writer.Write([]byte(users)); err != nil {
-//		return err
-//	}
-//
-//	return nil
-//}
+func (h *Handlers) GetUsers(c echo.Context) error {
+
+	users, err := h.srv.GetUsers()
+	if err != nil {
+		if _, err := c.Response().Write([]byte(err.Error())); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	if err := c.JSON(http.StatusOK, users); err != nil {
+		return err
+	}
+
+	return nil
+}
