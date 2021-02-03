@@ -5,7 +5,7 @@ import (
 	"github.com/AleksandrAkhapkin/true-conf/internal/types"
 )
 
-func (s *Service) CreateUser(userName string) error {
+func (s *Service) CreateUser(userName string) (int, error) {
 
 	//todo mutex
 	s.lastID++
@@ -17,7 +17,7 @@ func (s *Service) CreateUser(userName string) error {
 
 	s.users.Users = append(s.users.Users, user)
 
-	return nil
+	return s.lastID, nil
 }
 
 func (s *Service) GetUsers() (*types.Users, error) {
@@ -40,7 +40,7 @@ func (s *Service) GetUser(id int) (*types.User, error) {
 		}
 	}
 
-	return nil, fmt.Errorf("Пользователь не найден")
+	return nil, fmt.Errorf("Пользователь c ID: %d не найден", id)
 }
 
 func (s *Service) PutUser(id int, name string) error {
@@ -56,7 +56,7 @@ func (s *Service) PutUser(id int, name string) error {
 		}
 	}
 
-	return fmt.Errorf("Пользователь не найден")
+	return fmt.Errorf("Пользователь c ID: %d не найден", id)
 }
 
 func (s *Service) DeleteUser(id int) error {
@@ -66,14 +66,18 @@ func (s *Service) DeleteUser(id int) error {
 	}
 
 	usersTmp := &types.Users{}
-
+	del := false
 	for _, v := range s.users.Users {
 		if v.ID == id {
+			del = true
 			continue
 		}
 		usersTmp.Users = append(usersTmp.Users, v)
 	}
 
+	if !del {
+		return fmt.Errorf("Пользователь с ID: %d не найден", id)
+	}
 	s.users = usersTmp
 
 	return nil
