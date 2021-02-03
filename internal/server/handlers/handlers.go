@@ -27,28 +27,30 @@ func (h *Handlers) Ping(c echo.Context) error {
 	return nil
 }
 
-//func apiErrorEncode(w http.ResponseWriter, err error) {
+func (h *Handlers) CreateUser(c echo.Context) error {
+
+	req := c.Request()
+	userName := req.FormValue("name")
+
+	err := h.srv.CreateUser(userName)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+//func (h *Handlers) GetUsers(c echo.Context) error {
 //
-//	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 //
-//	if customError, ok := err.(*infrastruct.CustomError); ok {
-//		w.WriteHeader(customError.Code)
+//	users, err := h.srv.GetUsers()
+//	if err != nil {
+//		return err
 //	}
 //
-//	result := struct {
-//		Err string `json:"error"`
-//	}{
-//		Err: err.Error(),
+//	if _,  err := c.Response().Writer.Write([]byte(users)); err != nil {
+//		return err
 //	}
 //
-//	if err = json.NewEncoder(w).Encode(result); err != nil {
-//		logger.LogError(err)
-//	}
-//}
-//
-//func apiResponseEncoder(w http.ResponseWriter, res interface{}) {
-//	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-//	if err := json.NewEncoder(w).Encode(res); err != nil {
-//		logger.LogError(err)
-//	}
+//	return nil
 //}
