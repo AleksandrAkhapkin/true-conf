@@ -73,12 +73,12 @@ func openOrCreate() (*os.File, error) {
 	file, err := os.OpenFile("users.json", os.O_RDWR, 0777)
 	if err != nil {
 		if !os.IsNotExist(err) {
-			logger.LogError(errors.Wrap(err, "err with Open  in NewService"))
+			logger.LogError(errors.Wrap(err, "err with Open in openOrCreate"))
 			return nil, err
 		}
 		file, err = os.Create("users.json")
 		if err != nil {
-			logger.LogError(errors.Wrap(err, "err with Create  in NewService"))
+			logger.LogError(errors.Wrap(err, "err with Create  in openOrCreate"))
 			return nil, err
 		}
 	}
