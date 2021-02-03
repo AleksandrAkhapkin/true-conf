@@ -6,6 +6,7 @@ import (
 	"github.com/labstack/echo"
 	"github.com/pkg/errors"
 	"net/http"
+	"strconv"
 )
 
 type Handlers struct {
@@ -38,6 +39,11 @@ func (h *Handlers) CreateUser(c echo.Context) error {
 		return err
 	}
 
+	if _, err := c.Response().Writer.Write([]byte("Пользователь успешно зарегистрирован")); err != nil {
+		logger.LogError(errors.Wrap(err, "err with responseWriter in GetUsers"))
+		return err
+	}
+
 	return nil
 }
 
@@ -46,12 +52,44 @@ func (h *Handlers) GetUsers(c echo.Context) error {
 	users, err := h.srv.GetUsers()
 	if err != nil {
 		if _, err := c.Response().Write([]byte(err.Error())); err != nil {
+			logger.LogError(errors.Wrap(err, "err with responseWriter in GetUsers"))
 			return err
 		}
 		return nil
 	}
 
 	if err := c.JSON(http.StatusOK, users); err != nil {
+		logger.LogError(errors.Wrap(err, "err with c.JSON in GetUsers"))
+		return err
+	}
+
+	return nil
+}
+
+func (h *Handlers) GetUserByID(c echo.Context) error {
+
+	req := c.Request()
+
+	id, err := strconv.Atoi(req.FormValue("id"))
+	if err != nil {
+		if _, err := c.Response().Write([]byte(err.Error())); err != nil {
+			logger.LogError(errors.Wrap(err, "err with responseWriter in GetUserByID"))
+			return err
+		}
+		return nil
+	}
+
+	user, err := h.srv.GetUser(id)
+	if err != nil {
+		if _, err := c.Response().Write([]byte(err.Error())); err != nil {
+			logger.LogError(errors.Wrap(err, "err with responseWriter in GetUserByID"))
+			return err
+		}
+		return nil
+	}
+
+	if err := c.JSON(http.StatusOK, user); err != nil {
+		logger.LogError(errors.Wrap(err, "err with c.JSON in GetUserByID"))
 		return err
 	}
 
