@@ -27,3 +27,18 @@ func (s *Service) GetUsers() (*types.Users, error) {
 	}
 	return s.users, nil
 }
+
+func (s *Service) GetUser(id int) (*types.User, error) {
+
+	if s.users.Users == nil {
+		return nil, fmt.Errorf("Пользователей еще нету")
+	}
+
+	for _, v := range s.users.Users {
+		if v.ID == id {
+			return &v, nil
+		}
+	}
+
+	return nil, fmt.Errorf("Пользователь не найден")
+}
