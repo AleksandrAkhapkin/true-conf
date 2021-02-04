@@ -3,12 +3,12 @@ package service
 import (
 	"fmt"
 	"github.com/AleksandrAkhapkin/true-conf/internal/types"
+	"sync/atomic"
 )
 
-func (s *Service) CreateUser(userName string) (int, error) {
+func (s *Service) CreateUser(userName string) (int32, error) {
 
-	//todo mutex
-	s.lastID++
+	atomic.AddInt32(&s.lastID, 1)
 
 	user := types.User{
 		ID:   s.lastID,
@@ -28,7 +28,7 @@ func (s *Service) GetUsers() (*types.Users, error) {
 	return s.users, nil
 }
 
-func (s *Service) GetUser(id int) (*types.User, error) {
+func (s *Service) GetUser(id int32) (*types.User, error) {
 
 	if s.users.Users == nil {
 		return nil, fmt.Errorf("Пользователей еще нету")
@@ -43,7 +43,7 @@ func (s *Service) GetUser(id int) (*types.User, error) {
 	return nil, fmt.Errorf("Пользователь c ID: %d не найден", id)
 }
 
-func (s *Service) PutUser(id int, name string) error {
+func (s *Service) PutUser(id int32, name string) error {
 
 	if s.users.Users == nil {
 		return fmt.Errorf("Пользователей еще нету")
@@ -59,7 +59,7 @@ func (s *Service) PutUser(id int, name string) error {
 	return fmt.Errorf("Пользователь c ID: %d не найден", id)
 }
 
-func (s *Service) DeleteUser(id int) error {
+func (s *Service) DeleteUser(id int32) error {
 
 	if s.users.Users == nil {
 		return fmt.Errorf("Пользователей еще нету")

@@ -50,7 +50,7 @@ func (h *Handlers) GetUserByID(c echo.Context) error {
 		return nil
 	}
 
-	user, err := h.srv.GetUser(id)
+	user, err := h.srv.GetUser(int32(id))
 	if err != nil {
 		if _, err := c.Response().Write([]byte(err.Error())); err != nil {
 			logger.LogError(errors.Wrap(err, "err with responseWriter in GetUserByID"))
@@ -89,7 +89,7 @@ func (h *Handlers) PutUserByID(c echo.Context) error {
 		return nil
 	}
 
-	if err = h.srv.PutUser(id, name); err != nil {
+	if err = h.srv.PutUser(int32(id), name); err != nil {
 		if _, err := c.Response().Write([]byte(err.Error())); err != nil {
 			logger.LogError(errors.Wrap(err, "err with responseWriter in PutUserByID"))
 			return err
@@ -119,7 +119,7 @@ func (h *Handlers) DeleteUserByID(c echo.Context) error {
 		return nil
 	}
 
-	if err = h.srv.DeleteUser(id); err != nil {
+	if err = h.srv.DeleteUser(int32(id)); err != nil {
 		if _, err := c.Response().Write([]byte(err.Error())); err != nil {
 			logger.LogError(errors.Wrap(err, "err with responseWriter in DeleteUserByID"))
 			return err

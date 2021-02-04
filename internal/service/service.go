@@ -13,13 +13,14 @@ import (
 
 type Service struct {
 	file   *os.File
-	lastID int
+	lastID int32
 	users  *types.Users
 }
 
 func NewService() (*Service, error) {
 
-	lastID := 0
+	var lastID int32
+	lastID = 0
 	file, err := openOrCreate()
 	if err != nil {
 		return nil, err
