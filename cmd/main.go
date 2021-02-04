@@ -15,15 +15,6 @@ import (
 )
 
 func main() {
-	defer func() {
-		r := recover()
-		if r == nil {
-			return
-		}
-		err := fmt.Errorf("PANIC:'%v'\nRecovered in: %s", r, infrastructure.IdentifyPanic())
-		logger.LogError(err)
-	}()
-
 	port := new(string)
 	flag.StringVar(port, "port", "8080", "path to yaml config")
 	flag.Parse()
@@ -32,6 +23,16 @@ func main() {
 	if err != nil {
 		logger.LogFatal(errors.Wrap(err, "err with NewService"))
 	}
+
+	defer func() {
+		r := recover()
+		if r == nil {
+			return
+		}
+		err := fmt.Errorf("PANIC:'%v'\nRecovered in: %s", r, infrastructure.IdentifyPanic())
+		logger.LogError(err)
+		srv.Close()
+	}()
 
 	handls, err := handlers.NewHandlers(srv)
 	if err != nil {
