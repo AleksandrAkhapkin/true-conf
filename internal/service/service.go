@@ -12,7 +12,6 @@ import (
 )
 
 type Service struct {
-	file   *os.File
 	lastID int32
 	users  *types.Users
 }
@@ -33,7 +32,6 @@ func NewService() (*Service, error) {
 		if err == io.EOF {
 			return &Service{
 				lastID: lastID,
-				file:   file,
 				users:  users,
 			}, nil
 		}
@@ -48,20 +46,23 @@ func NewService() (*Service, error) {
 
 	return &Service{
 		lastID: lastID,
-		file:   file,
 		users:  users,
 	}, nil
 }
 
 func (s *Service) Close() {
 
+	file, err := openOrCreate()
+	if err != nil {
+		logger.LogFatal(err)
+	}
 	if s.users.Users != nil {
 		b, err := json.Marshal(s.users)
 		if err != nil {
 			logger.LogError(errors.Wrap(err, "err with Marshal in Close"))
 			return
 		}
-		_, err = s.file.WriteAt(b, 0)
+		_, err = file.WriteAt(b, 0)
 		if err != nil {
 			logger.LogError(errors.Wrap(err, "err with file.Write"))
 			return
