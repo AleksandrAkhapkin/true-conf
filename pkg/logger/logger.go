@@ -6,10 +6,13 @@ import (
 	"time"
 )
 
-var logger = zerolog.New(os.Stdout)
+var (
+	logger    = zerolog.New(os.Stdout)
+	loggerErr = zerolog.New(os.Stderr)
+)
 
 func LogError(err error) {
-	logger.Err(err).Time("time", time.Now()).Send()
+	loggerErr.Err(err).Time("time", time.Now()).Send()
 }
 
 func LogInfo(msg string) {
@@ -17,5 +20,5 @@ func LogInfo(msg string) {
 }
 
 func LogFatal(err error) {
-	logger.Fatal().Err(err).Time("time", time.Now()).Send()
+	loggerErr.Fatal().Err(err).Time("time", time.Now()).Send()
 }
